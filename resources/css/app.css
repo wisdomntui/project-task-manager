@@ -1,0 +1,26 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+.task-row {
+    transition: background-color 0.15s ease;
+}
+
+.task-row:hover {
+    background-color: #f8f9fa;
+}
+
+.drag-handle {
+    cursor: grab;
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+.task-priority {
+    width: 30px;
+    text-align: center;
+}
+
+.sortable-ghost {
+    opacity: 0.5;
+}
