@@ -1,66 +1,210 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Task Management Application
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A simple, robust task management application built with **Laravel 11**, **PHP 8.3**, **MySQL**, and an interactive frontend powered by **Blade**, **Bootstrap 5**, **jQuery**, and **SortableJS**.
 
-## About Laravel
+The application allows users to seamlessly create, edit, delete, filter, and dynamically reorder tasks. Task priority is automatically recalculated on the backend based on the drag-and-drop arrangement on the frontend.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🚀 Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 📋 Task Operations
+* **Create Tasks** – Add new tasks instantly with clean UI forms.
+* **Edit Tasks** – Modify task titles and reassign project categories on the fly.
+* **Delete Tasks** – Safely remove tasks with correct HTTP response lifecycles.
 
-## Learning Laravel
+### 🔄 Dynamic Ordering & Context
+* **Drag-and-Drop Reordering** – Move tasks visually using a seamless frontend interface.
+* **Automatic Priority Management** – Order changes trigger instant, backend-recalculated priority mapping.
+* **Database Transactions** – Bulk priority updates run inside strict database transactions for optimal data integrity.
+* **Project Isolation** – Assign tasks to specific projects and filter lists instantly. Drag-and-drop actions are strictly scoped to the active project context.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 🛡️ Architecture & Security
+* **Server-Side Validation** – Robust Laravel Form Request validation safeguards incoming payloads.
+* **Pest Test Suite** – Fully covered by feature tests ensuring regression-free changes.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🛠️ Tech Stack
 
-## Laravel Sponsors
+### Backend
+* [PHP 8.3+](https://www.php.net/)
+* [Laravel 11.x](https://laravel.com/)
+* [MySQL 8.0+](https://www.mysql.com/)
+* Eloquent ORM & Laravel Form Requests
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Frontend
+* [Blade Templates](https://laravel.com/docs/11.x/blade)
+* [Bootstrap 5](https://getbootstrap.com/)
+* [jQuery](https://jquery.com/)
+* [SortableJS](https://sortablejs.github.io/Sortable/)
+* [Vite Assets Bundler](https://vite.dev/)
 
-### Premium Partners
+### Testing
+* [Pest Testing Framework](https://pestphp.com/) (Laravel Feature Tests)
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+---
 
-## Contributing
+## 📂 Project Structure
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```text
+app/
+├── Http/
+│   ├── Controllers/
+│   │   └── TaskController.php       # Handles core task operations & transaction reordering
+│   └── Requests/
+│       ├── StoreTaskRequest.php     # Validates incoming task payloads
+│       └── UpdateTaskRequest.php    # Validates updates and modifications
+└── Models/
+    ├── Project.php                  # One-To-Many: Project has many Tasks
+    └── Task.php                     # BelongsTo Project relationship code
 
-## Code of Conduct
+database/
+├── factories/                       # Blueprint models for seeding & Pest testing
+├── migrations/                      # Tables setup for projects & sequenced tasks
+└── seeders/                         # Dummy data for zero-config evaluation
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+resources/
+├── css/
+│   └── app.css
+├── js/
+│   ├── app.js                       # Entry point bundling Bootstrap & global modules
+│   └── tasks.js                     # Implements SortableJS & AJAX payload sync
+└── views/
+    ├── layouts/
+    │   └── app.blade.php            # Primary structural template shell
+    └── tasks/
+        ├── index.blade.php          # Main dashboard view
+        ├── edit.blade.php           # Focused editing interface
+        └── partials/
+            ├── task-row.blade.php   # Reusable table line items for drag-and-drop
+            └── create-form.blade.php
+```
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## ⚙️ Technical Approach & Design Choices
 
-## License
+### Core Philosophy
+The codebase strictly follows official Laravel style conventions and leverages integrated framework ecosystems instead of packing arbitrary architectural abstractions (such as repositories or service layers). It leans heavily on native Eloquent relationships, **Route Model Binding**, Form Requests, and Database Transactions.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Priority Realignment Flow
+Priority calculations are strictly server-controlled to prevent client-side data contamination or race conditions:
+1. **SortableJS** triggers a drop action in the browser.
+2. **jQuery AJAX** intercepts the mutation and passes serialized structural element IDs back to the controller.
+3. The backend validates structural array IDs within a scoped **Database Transaction**.
+4. Loop iterations sequentially rewrite structural indexes from `1` to `N` keeping operations clean and atomic.
+
+```text
+Visual Move:          Backend Transaction Sync:
+[ Task C ]   ───┐     Task C ➔ Priority 1
+[ Task A ]      │     Task A ➔ Priority 2
+[ Task D ]   ───┼─➔   Task D ➔ Priority 3
+[ Task B ]   ───┘     Task B ➔ Priority 4
+```
+
+---
+
+## 💻 Installation & Local Setup
+
+### 1. System Requirements
+Ensure your workspace includes:
+* **Composer**
+* **Node.js & NPM**
+* Active **MySQL** Service
+
+### 2. Clone & Setup Environments
+```bash
+# Clone the repository
+git clone <repository-url>
+cd task-manager
+
+# Install vendor dependencies
+composer install
+npm install
+```
+
+### 3. Application Configurations
+```bash
+# Set up environment workspace config
+cp .env.example .env
+
+# Generate encryption token key
+php artisan key:generate
+```
+
+### 4. Database Initialization
+Modify your local `.env` settings to target your MySQL instance:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=task_manager
+DB_USERNAME=root
+DB_PASSWORD=YOUR_PASSWORD_HERE
+```
+
+Apply schemas and generate seeded sample rows:
+```bash
+php artisan migrate --seed
+```
+
+### 5. Fire Up the Servers
+Launch your local PHP instance:
+```bash
+php artisan serve
+```
+In a secondary terminal tab, spin up the Vite compiler:
+```bash
+npm run dev
+```
+Open your web browser and view the app at: **`http://127.0.0.1:8000`**
+
+---
+
+## 🚀 Production Optimizations
+
+To launch securely on production nodes, build cached artifacts and run isolated environment triggers:
+
+```bash
+# Production installation routines
+composer install --no-dev --optimize-autoloader
+npm install
+npm run build
+
+# Fast execution caching
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+# Secure schema adjustment without interactive inputs
+php artisan migrate --force
+```
+
+---
+
+## 🧪 Running the Test Suite
+
+This application enforces feature integrity through a highly readable **Pest** suite. 
+
+```bash
+# Execute the entire suite
+php artisan test
+
+# Alternatively, run via Pest directly
+./vendor/bin/pest
+
+# Run localized Task validation flows exclusively
+./vendor/bin/pest tests/Feature/TaskManagementTest.php
+```
+
+### Coverage Assertions
+* Task Creation & Validation rulesets
+* Task Index Listing and Project filter queries
+* Soft or complete data mutations (Update/Delete lifecycles)
+* Dynamic order preservation loops inside transactions
+
+---
+
+## 📝 License
+This project is open-source software licensed under the [MIT License](LICENSE).
