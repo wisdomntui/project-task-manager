@@ -71,36 +71,14 @@ resources/
 │   ├── app.js                       # Entry point bundling Bootstrap & global modules
 │   └── tasks.js                     # Implements SortableJS & AJAX payload sync
 └── views/
-    ├── layouts/
+    ├── layout/
     │   └── app.blade.php            # Primary structural template shell
     └── tasks/
         ├── index.blade.php          # Main dashboard view
         ├── edit.blade.php           # Focused editing interface
         └── partials/
-            ├── task-row.blade.php   # Reusable table line items for drag-and-drop
-            └── create-form.blade.php
-```
-
----
-
-## ⚙️ Technical Approach & Design Choices
-
-### Core Philosophy
-The codebase strictly follows official Laravel style conventions and leverages integrated framework ecosystems instead of packing arbitrary architectural abstractions (such as repositories or service layers). It leans heavily on native Eloquent relationships, **Route Model Binding**, Form Requests, and Database Transactions.
-
-### Priority Realignment Flow
-Priority calculations are strictly server-controlled to prevent client-side data contamination or race conditions:
-1. **SortableJS** triggers a drop action in the browser.
-2. **jQuery AJAX** intercepts the mutation and passes serialized structural element IDs back to the controller.
-3. The backend validates structural array IDs within a scoped **Database Transaction**.
-4. Loop iterations sequentially rewrite structural indexes from `1` to `N` keeping operations clean and atomic.
-
-```text
-Visual Move:          Backend Transaction Sync:
-[ Task C ]   ───┐     Task C ➔ Priority 1
-[ Task A ]      │     Task A ➔ Priority 2
-[ Task D ]   ───┼─➔   Task D ➔ Priority 3
-[ Task B ]   ───┘     Task B ➔ Priority 4
+            ├── task-rows.blade.php   # Reusable table line items for drag-and-drop
+            └── create-task-modal.blade.php
 ```
 
 ---
@@ -112,12 +90,6 @@ Ensure your workspace includes:
 * **Composer**
 * **Node.js & NPM**
 * Active **MySQL** Service
-
-### 2. Clone & Setup Environments
-```bash
-# Clone the repository
-git clone <repository-url>
-cd task-manager
 
 # Install vendor dependencies
 composer install
@@ -139,7 +111,7 @@ Modify your local `.env` settings to target your MySQL instance:
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=task_manager
+DB_DATABASE=project_task_manager
 DB_USERNAME=root
 DB_PASSWORD=YOUR_PASSWORD_HERE
 ```
@@ -162,27 +134,6 @@ Open your web browser and view the app at: **`http://127.0.0.1:8000`**
 
 ---
 
-## 🚀 Production Optimizations
-
-To launch securely on production nodes, build cached artifacts and run isolated environment triggers:
-
-```bash
-# Production installation routines
-composer install --no-dev --optimize-autoloader
-npm install
-npm run build
-
-# Fast execution caching
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-
-# Secure schema adjustment without interactive inputs
-php artisan migrate --force
-```
-
----
-
 ## 🧪 Running the Test Suite
 
 This application enforces feature integrity through a highly readable **Pest** suite. 
@@ -202,9 +153,6 @@ php artisan test
 * Task Creation & Validation rulesets
 * Task Index Listing and Project filter queries
 * Soft or complete data mutations (Update/Delete lifecycles)
-* Dynamic order preservation loops inside transactions
+* Dynamic ordering and priority updates
 
 ---
-
-## 📝 License
-This project is open-source software licensed under the [MIT License](LICENSE).
