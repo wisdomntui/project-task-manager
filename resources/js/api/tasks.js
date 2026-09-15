@@ -92,12 +92,10 @@ function reorderTasks() {
             return $(this).data("task-id");
         })
         .get();
-    const projectId = $("#project-filter").val();
 
     // Send post request with new order after UI has been altered
     $.post("/tasks/reorder", {
         task_ids: taskIds,
-        project_id: projectId,
     })
         .done(function () {
             updateVisiblePriorities();

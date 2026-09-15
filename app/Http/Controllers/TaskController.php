@@ -52,8 +52,7 @@ class TaskController extends Controller
 
     private function getNextPriority(?int $projectId): int
     {
-        $maxPriority = Task::query()
-            ->where('project_id', $projectId)
+        $maxPriority = Task::where('project_id', $projectId)
             ->max('priority') ?? 0;
 
         return $maxPriority + 1;
@@ -96,13 +95,18 @@ class TaskController extends Controller
 
     public function delete(Task $task): JsonResponse
     {
-        $projectId = $task->project_id;
+        $highestPriority = Task::max('priority');
 
-        // This transaction block will ensure that the deletion and priorities of a task is complete
-        DB::transaction(function () use ($task, $projectId) {
+        // Check if the task being deleted is the highest priority task
+        $isHighestPriority = $task->priority === $highestPriority;
+
+        // This transaction block will ensure that the deletion and priorities of a task is complete or will rollback on failure
+        DB::transaction(function () use ($task, $isHighestPriority) {
             $task->delete();
 
-            $this->resolvePriorities($projectId);
+            if (!$isHighestPriority) {
+                $this->resolvePriorities();
+            }
         });
 
         return response()->json([
@@ -110,11 +114,9 @@ class TaskController extends Controller
         ]);
     }
 
-    private function resolvePriorities(?int $projectId): void
+    private function resolvePriorities(): void
     {
-        $tasks = Task::query()
-            ->where('project_id', $projectId)
-            ->orderBy('priority')
+        $tasks = Task::orderBy('priority')
             ->orderBy('id')
             ->get();
 

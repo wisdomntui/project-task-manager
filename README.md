@@ -45,6 +45,12 @@ The application allows users to seamlessly create, edit, delete, filter, and dyn
 
 ---
 
+## 📐 Technical Decisions
+
+For a clean and minimal tech stack, the app utilizes server rendered Blade architecture and jQuery + SortableJS instead of heavier solutions like Livewire, React or Vue to avoid extra abstractions and complexity for a small-scale app while still providing a good UX with interactive drag-and-drop operations. On the backend, the app focuses on the data integrity and code separation by using Laravel Form Requests to keep validation logic separate from the controllers. Moreover, the task’s priority calculations are handled on the backend to keep database as a source of truth and wrapped in database transactions to ensure that either all priority changes and deletions propagate or none if an error occurs.
+
+---
+
 ## 📂 Project Structure
 
 ```text
@@ -83,6 +89,28 @@ resources/
 
 ---
 
+## 📋 Database Design
+
+![alt text](image.png)
+
+---
+
+## 🖥️ User Interface Screens
+
+### Landing Page / Task Dashboard
+Displays the active list of tasks with drag-and-drop reordering indicators, project filtering, and quick actions for editing or deleting tasks.
+![alt text](image-1.png)
+
+### Add Task Modal
+Allows users to instantly add new tasks to the application, complete with inline field validation alerts.
+![alt text](image-2.png)
+
+### Edit Task Screen
+A focused layout to modify a task's name, reassigned project category, and review its current sequence priority status.
+![alt text](image-3.png)
+
+---
+
 ## 💻 Installation & Local Setup
 
 ### 1. System Requirements
@@ -91,6 +119,8 @@ Ensure your workspace includes:
 * **Node.js & NPM**
 * Active **MySQL** Service
 
+### 2. Dependency Setup
+```bash
 # Install vendor dependencies
 composer install
 npm install
@@ -154,5 +184,3 @@ php artisan test
 * Task Index Listing and Project filter queries
 * Soft or complete data mutations (Update/Delete lifecycles)
 * Dynamic ordering and priority updates
-
----

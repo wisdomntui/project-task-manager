@@ -16,7 +16,6 @@ class ReorderTaskRequest extends FormRequest
         return [
             'task_ids' => ['required', 'array', 'min:1'],
             'task_ids.*' => ['integer', 'distinct', 'exists:tasks,id'],
-            'project_id' => ['nullable', 'integer', 'exists:projects,id'],
         ];
     }
 }
