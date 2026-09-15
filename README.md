@@ -2,7 +2,7 @@
 
 A simple, robust task management application built with **Laravel 11**, **PHP 8.3**, **MySQL**, and an interactive frontend powered by **Blade**, **Bootstrap 5**, **jQuery**, and **SortableJS**.
 
-The application allows users to seamlessly create, edit, delete, filter, and dynamically reorder tasks. Task priority is automatically recalculated on the backend based on the drag-and-drop arrangement on the frontend.
+The application allows users to seamlessly create, edit, delete, filter, and dynamically reorder tasks. Task priority is automatically recalculated on the backend based on the drag-and-drop ordering on the frontend.
 
 ---
 
